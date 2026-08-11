@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J.A.R.V.I.S.</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="background-grid"></div>
+    <div class="scanline"></div>
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">J</div>
+            <div>
+                <h1>J.A.R.V.I.S.</h1>
+                <span>JUST A RATHER VERY INTELLIGENT SYSTEM</span>
+            </div>
+        </div>
+
+        <div class="system-info">
+            <div class="status">
+                <span class="status-dot"></span>
+                ONLINE
+            </div>
+
+            <div id="clock">00:00:00</div>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="left-panel">
+
+            <div class="panel-title">
+                <span>SISTEMA</span>
+                <span class="line"></span>
+            </div>
+
+            <div class="system-card">
+                <div class="card-label">STATUS</div>
+                <div class="card-value online">OPERACIONAL</div>
+            </div>
+
+            <div class="system-card">
+                <div class="card-label">RECONHECIMENTO</div>
+                <div class="card-value" id="voiceStatus">AGUARDANDO</div>
+            </div>
+
+            <div class="system-card">
+                <div class="card-label">MODO</div>
+                <div class="card-value">ASSISTENTE</div>
+            </div>
+
+            <div class="system-card">
+                <div class="card-label">INTERFACE</div>
+                <div class="card-value">WEB 1.0</div>
+            </div>
+
+        </section>
+
+
+        <section class="center-panel">
+
+            <div class="reactor-container">
+
+                <div class="reactor-ring ring-1"></div>
+                <div class="reactor-ring ring-2"></div>
+                <div class="reactor-ring ring-3"></div>
+                <div class="reactor-ring ring-4"></div>
+
+                <div class="reactor">
+                    <div class="reactor-core">
+                        <span>J</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="assistant-status" id="assistantStatus">
+                AGUARDANDO COMANDO
+            </div>
+
+            <button id="micButton" class="mic-button">
+                <span class="mic-icon">🎙️</span>
+            </button>
+
+            <div class="mic-help">
+                Clique no microfone e fale com JARVIS
+            </div>
+
+        </section>
+
+
+        <section class="right-panel">
+
+            <div class="panel-title">
+                <span>DIAGNÓSTICO</span>
+                <span class="line"></span>
+            </div>
+
+            <div class="diagnostic">
+                <div class="diagnostic-header">
+                    <span>CPU</span>
+                    <span id="cpuValue">42%</span>
+                </div>
+                <div class="progress">
+                    <div id="cpuBar"></div>
+                </div>
+            </div>
+
+            <div class="diagnostic">
+                <div class="diagnostic-header">
+                    <span>MEMÓRIA</span>
+                    <span id="memoryValue">58%</span>
+                </div>
+                <div class="progress">
+                    <div id="memoryBar"></div>
+                </div>
+            </div>
+
+            <div class="diagnostic">
+                <div class="diagnostic-header">
+                    <span>CONEXÃO</span>
+                    <span>ONLINE</span>
+                </div>
+                <div class="progress">
+                    <div class="connection-bar"></div>
+                </div>
+            </div>
+
+            <div class="diagnostic-box">
+                <div>SECURITY</div>
+                <strong>PROTECTED</strong>
+            </div>
+
+            <div class="diagnostic-box">
+                <div>VOICE ENGINE</div>
+                <strong>READY</strong>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <section class="console">
+
+        <div class="console-header">
+            <span>CONSOLE JARVIS</span>
+            <span id="consoleStatus">SYSTEM READY</span>
+        </div>
+
+        <div id="chat" class="chat">
+
+            <div class="message jarvis">
+                <span class="message-label">JARVIS</span>
+                <p>Boa noite. Sistema inicializado. Como posso ajudá-lo?</p>
+            </div>
+
+        </div>
+
+        <div class="input-area">
+
+            <input
+                type="text"
+                id="textInput"
+                placeholder="Digite um comando para JARVIS..."
+                autocomplete="off"
+            >
+
+            <button id="sendButton">
+                ENVIAR
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+        <span>J.A.R.V.I.S. WEB INTERFACE</span>
+        <span>VERSION 1.0</span>
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
