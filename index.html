@@ -1,193 +1,419 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J.A.R.V.I.S.</title>
+
+    <title>SIGDH - Sistema Integrado de Gestão de Demandas Hospitalares</title>
+
     <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
 
-    <div class="background-grid"></div>
-    <div class="scanline"></div>
+    <!-- MENU LATERAL -->
 
-    <header class="topbar">
-        <div class="brand">
-            <div class="brand-icon">J</div>
+    <aside class="sidebar">
+
+        <div class="logo-area">
+
+            <h2>SIGDH</h2>
+
+            <span>v2.0</span>
+
+        </div>
+
+        <ul>
+
+            <li><i class="fa-solid fa-house"></i> Dashboard</li>
+
+            <li><i class="fa-solid fa-file-lines"></i> Demandas</li>
+
+            <li><i class="fa-solid fa-chart-column"></i> Indicadores</li>
+
+            <li><i class="fa-solid fa-ranking-star"></i> Ranking</li>
+
+            <li><i class="fa-solid fa-file-excel"></i> Exportação</li>
+
+            <li><i class="fa-solid fa-users"></i> Usuários</li>
+
+            <li><i class="fa-solid fa-gear"></i> Configurações</li>
+
+        </ul>
+
+    </aside>
+
+    <!-- CONTEÚDO -->
+
+    <main class="main-content">
+
+        <!-- TOPO -->
+
+        <header class="topbar">
+
             <div>
-                <h1>J.A.R.V.I.S.</h1>
-                <span>JUST A RATHER VERY INTELLIGENT SYSTEM</span>
-            </div>
-        </div>
 
-        <div class="system-info">
-            <div class="status">
-                <span class="status-dot"></span>
-                ONLINE
-            </div>
+                <h1>
+                    Sistema Integrado de Gestão de Demandas Hospitalares
+                </h1>
 
-            <div id="clock">00:00:00</div>
-        </div>
-    </header>
+                <p>
+                    Classificação automática de ofensores
+                </p>
 
-    <main>
-
-        <section class="left-panel">
-
-            <div class="panel-title">
-                <span>SISTEMA</span>
-                <span class="line"></span>
             </div>
 
-            <div class="system-card">
-                <div class="card-label">STATUS</div>
-                <div class="card-value online">OPERACIONAL</div>
+            <div class="user-info">
+
+                <div id="dataAtual"></div>
+
+                <div id="horaAtual"></div>
+
+                <div>
+                    👤 Administrador
+                </div>
+
             </div>
 
-            <div class="system-card">
-                <div class="card-label">RECONHECIMENTO</div>
-                <div class="card-value" id="voiceStatus">AGUARDANDO</div>
+        </header>
+
+        <!-- DASHBOARD -->
+
+        <section class="dashboard">
+
+            <div class="card">
+                <h3>Total Demandas</h3>
+                <span id="totalDemandas">0</span>
             </div>
 
-            <div class="system-card">
-                <div class="card-label">MODO</div>
-                <div class="card-value">ASSISTENTE</div>
+            <div class="card">
+                <h3>Material</h3>
+                <span id="totalMaterial">0</span>
             </div>
 
-            <div class="system-card">
-                <div class="card-label">INTERFACE</div>
-                <div class="card-value">WEB 1.0</div>
+            <div class="card">
+                <h3>Medicamento</h3>
+                <span id="totalMedicamento">0</span>
+            </div>
+
+            <div class="card">
+                <h3>Farmácia</h3>
+                <span id="totalFarmacia">0</span>
+            </div>
+
+            <div class="card">
+                <h3>Logística</h3>
+                <span id="totalLogistica">0</span>
+            </div>
+
+            <div class="card">
+                <h3>OPME</h3>
+                <span id="totalOpme">0</span>
+            </div>
+
+            <div class="card">
+                <h3>Regulação</h3>
+                <span id="totalRegulacao">0</span>
+            </div>
+
+            <div class="card">
+                <h3>Demandas Críticas</h3>
+                <span id="totalCriticas">0</span>
             </div>
 
         </section>
 
+        <!-- IMPORTAÇÃO -->
 
-        <section class="center-panel">
+        <section class="upload-section">
 
-            <div class="reactor-container">
+            <div class="box">
 
-                <div class="reactor-ring ring-1"></div>
-                <div class="reactor-ring ring-2"></div>
-                <div class="reactor-ring ring-3"></div>
-                <div class="reactor-ring ring-4"></div>
+                <h2>Importar Planilha Excel</h2>
 
-                <div class="reactor">
-                    <div class="reactor-core">
-                        <span>J</span>
-                    </div>
-                </div>
+                <input
+                    type="file"
+                    id="arquivoExcel"
+                    accept=".xlsx,.xls">
 
-            </div>
+                <button onclick="importarExcel()">
 
-            <div class="assistant-status" id="assistantStatus">
-                AGUARDANDO COMANDO
-            </div>
+                    <i class="fa-solid fa-upload"></i>
 
-            <button id="micButton" class="mic-button">
-                <span class="mic-icon">🎙️</span>
-            </button>
+                    Importar Planilha
 
-            <div class="mic-help">
-                Clique no microfone e fale com JARVIS
-            </div>
+                </button>
 
-        </section>
+                <button onclick="exportarTratada()">
 
+                    <i class="fa-solid fa-download"></i>
 
-        <section class="right-panel">
+                    Exportar Resultado
 
-            <div class="panel-title">
-                <span>DIAGNÓSTICO</span>
-                <span class="line"></span>
-            </div>
+                </button>
 
-            <div class="diagnostic">
-                <div class="diagnostic-header">
-                    <span>CPU</span>
-                    <span id="cpuValue">42%</span>
-                </div>
-                <div class="progress">
-                    <div id="cpuBar"></div>
-                </div>
-            </div>
-
-            <div class="diagnostic">
-                <div class="diagnostic-header">
-                    <span>MEMÓRIA</span>
-                    <span id="memoryValue">58%</span>
-                </div>
-                <div class="progress">
-                    <div id="memoryBar"></div>
-                </div>
-            </div>
-
-            <div class="diagnostic">
-                <div class="diagnostic-header">
-                    <span>CONEXÃO</span>
-                    <span>ONLINE</span>
-                </div>
-                <div class="progress">
-                    <div class="connection-bar"></div>
-                </div>
-            </div>
-
-            <div class="diagnostic-box">
-                <div>SECURITY</div>
-                <strong>PROTECTED</strong>
-            </div>
-
-            <div class="diagnostic-box">
-                <div>VOICE ENGINE</div>
-                <strong>READY</strong>
             </div>
 
         </section>
 
-    </main>
+        <!-- DRAG DROP -->
 
+        <section id="dropzone">
 
-    <section class="console">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
 
-        <div class="console-header">
-            <span>CONSOLE JARVIS</span>
-            <span id="consoleStatus">SYSTEM READY</span>
-        </div>
+            <p>
+                Arraste a planilha Excel para esta área
+            </p>
 
-        <div id="chat" class="chat">
+        </section>
 
-            <div class="message jarvis">
-                <span class="message-label">JARVIS</span>
-                <p>Boa noite. Sistema inicializado. Como posso ajudá-lo?</p>
-            </div>
+        <!-- PESQUISA -->
 
-        </div>
-
-        <div class="input-area">
+        <section class="search-area">
 
             <input
                 type="text"
-                id="textInput"
-                placeholder="Digite um comando para JARVIS..."
-                autocomplete="off"
-            >
+                id="busca"
+                placeholder="Pesquisar protocolo, beneficiário ou reclamação">
 
-            <button id="sendButton">
-                ENVIAR
+            <button>
+
+                Buscar
+
             </button>
 
-        </div>
+        </section>
 
-    </section>
+        <!-- FILTROS -->
 
+        <section class="filtros">
 
-    <footer>
-        <span>J.A.R.V.I.S. WEB INTERFACE</span>
-        <span>VERSION 1.0</span>
-    </footer>
+            <select id="filtroOfensor">
 
+                <option>Todos</option>
+
+                <option>Material</option>
+
+                <option>Medicamento</option>
+
+                <option>Farmácia</option>
+
+                <option>Logística</option>
+
+                <option>OPME</option>
+
+                <option>Regulação</option>
+
+            </select>
+
+            <select id="filtroPrioridade">
+
+                <option>Todas Prioridades</option>
+
+                <option>Alta</option>
+
+                <option>Média</option>
+
+                <option>Baixa</option>
+
+            </select>
+
+        </section>
+
+        <!-- ALERTAS -->
+
+        <section class="alertas">
+
+            <h2>Alertas do Sistema</h2>
+
+            <div id="alertaSistema">
+
+                Nenhum alerta encontrado.
+
+            </div>
+
+        </section>
+
+        <!-- RESUMO -->
+
+        <section class="resumo">
+
+            <h2>Resumo Executivo</h2>
+
+            <div id="resumoSistema">
+
+                Nenhuma planilha importada.
+
+            </div>
+
+        </section>
+
+        <!-- RANKING -->
+
+        <section class="ranking">
+
+            <h2>Ranking de Ofensores</h2>
+
+            <ol id="rankingOfensores">
+
+            </ol>
+
+        </section>
+
+        <!-- GRÁFICOS -->
+
+        <section class="graficos">
+
+            <div class="grafico-card">
+
+                <h3>Demandas por Ofensor</h3>
+
+                <canvas id="graficoOfensor"></canvas>
+
+            </div>
+
+            <div class="grafico-card">
+
+                <h3>Demandas por Prioridade</h3>
+
+                <canvas id="graficoPrioridade"></canvas>
+
+            </div>
+
+            <div class="grafico-card">
+
+                <h3>Demandas por Status</h3>
+
+                <canvas id="graficoStatus"></canvas>
+
+            </div>
+
+            <div class="grafico-card">
+
+                <h3>Demandas por Operadora</h3>
+
+                <canvas id="graficoOperadora"></canvas>
+
+            </div>
+
+        </section>
+
+        <!-- HISTÓRICO -->
+
+        <section class="historico">
+
+            <h2>Histórico de Importações</h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Data</th>
+
+                        <th>Quantidade</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="historicoImportacoes">
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+        <!-- TABELA PRINCIPAL -->
+
+        <section class="tabela-container">
+
+            <h2>Demandas Processadas</h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>REGISTRO</th>
+
+                        <th>PROTOCOLO</th>
+
+                        <th>BENEFICIÁRIO</th>
+
+                        <th>OPERADORA</th>
+
+                        <th>PRESTADOR</th>
+
+                        <th>RECLAMAÇÃO</th>
+
+                        <th>OFENSOR</th>
+
+                        <th>PRIORIDADE</th>
+
+                        <th>STATUS</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="tabelaDemandas">
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+        <!-- AÇÕES -->
+
+        <section class="acoes">
+
+            <button id="darkMode">
+
+                🌙 Modo Escuro
+
+            </button>
+
+            <button onclick="window.print()">
+
+                📄 Gerar PDF
+
+            </button>
+
+        </section>
+
+        <!-- RODAPÉ -->
+
+        <footer>
+
+            SIGDH © 2026
+
+            Sistema Integrado de Gestão de Demandas Hospitalares
+
+        </footer>
+
+    </main>
 
     <script src="script.js"></script>
 
 </body>
+
 </html>
