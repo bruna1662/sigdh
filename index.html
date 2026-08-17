@@ -78,7 +78,6 @@
 
         <div class="brand-text">
             <strong>SIGDH</strong>
-            <span>Versão 3.0</span>
         </div>
 
     </div>
@@ -295,22 +294,32 @@
                     </p>
                 </div>
 
+               <div class="upload-zone">
 
-                <div class="section-actions">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
 
-                    <button
-                        class="btn btn-primary"
-                        id="dashboardImportButton"
-                    >
-                        <i class="fa-solid fa-file-import"></i>
-                        Importar Planilha
-                    </button>
+          <h3>Importar Planilha Excel</h3>
 
-                </div>
+          <p>
+           Arraste sua planilha aqui ou escolha um arquivo
+        </p>
 
-            </div>
+      <input
+        type="file"
+        id="excelFile"
+        accept=".xlsx,.xls,.csv"
+        hidden
+       >
 
+      <button
+        type="button"
+        id="btnImportar"
+       >
+        Escolher arquivo
+      </button>
 
+     </div>
+            
             <!-- CARDS -->
 
             <div class="stats-grid">
