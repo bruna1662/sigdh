@@ -1,419 +1,2002 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>SIGDH - Análise de ofensores SAC e NIP</title>
+    <meta
+        name="description"
+        content="SIGDH 3.0 - Sistema Integrado de Gestão e Análise de Demandas Hospitalares"
+    >
 
+    <meta name="theme-color" content="#0f172a">
+
+    <title>Análise de ofensores SAC e NIP</title>
+
+    <!-- CSS principal -->
     <link rel="stylesheet" href="css/style.css">
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Ícones -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Excel -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+        defer
+    ></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <!-- Gráficos -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+        defer
+    ></script>
 </head>
 
 <body>
 
-    <!-- MENU LATERAL -->
+<!-- =========================================================
+     TELA DE CARREGAMENTO
+========================================================= -->
 
-    <aside class="sidebar">
-
-        <div class="logo-area">
-
-            <h2>SIGDH</h2>
-
-            <span>v2.0</span>
-
+<div id="loadingScreen" class="loading-screen">
+    <div class="loading-content">
+        <div class="loading-logo">
+            <i class="fa-solid fa-hospital"></i>
         </div>
 
-        <ul>
+        <h2>SIGDH</h2>
 
-            <li><i class="fa-solid fa-house"></i> Dashboard</li>
+        <p>
+            Sistema de Análise de SAC
+        </p>
 
-            <li><i class="fa-solid fa-file-lines"></i> Demandas</li>
+        <div class="loading-spinner"></div>
 
-            <li><i class="fa-solid fa-chart-column"></i> Indicadores</li>
+        <span>Carregando sistema...</span>
+    </div>
+</div>
 
-            <li><i class="fa-solid fa-ranking-star"></i> Ranking</li>
 
-            <li><i class="fa-solid fa-file-excel"></i> Exportação</li>
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
 
-            <li><i class="fa-solid fa-users"></i> Usuários</li>
+<aside id="sidebar" class="sidebar">
 
-            <li><i class="fa-solid fa-gear"></i> Configurações</li>
+    <div class="sidebar-header">
 
-        </ul>
+        <div class="brand-icon">
+            <i class="fa-solid fa-hospital-user"></i>
+        </div>
 
-    </aside>
+        <div class="brand-text">
+            <strong>SIGDH</strong>
+            <span>Versão 3.0</span>
+        </div>
 
-    <!-- CONTEÚDO -->
+    </div>
 
-    <main class="main-content">
 
-        <!-- TOPO -->
+    <nav class="sidebar-menu">
 
-        <header class="topbar">
+        <p class="menu-title">
+            PRINCIPAL
+        </p>
 
-            <div>
+        <button
+            class="menu-item active"
+            data-section="dashboard"
+        >
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Dashboard</span>
+        </button>
 
-                <h1>
-                    Sistema Integrado de Gestão de Demandas Hospitalares
+
+        <button
+            class="menu-item"
+            data-section="demandas"
+        >
+            <i class="fa-solid fa-file-medical"></i>
+            <span>Demandas</span>
+        </button>
+
+
+        <p class="menu-title">
+            ANÁLISES
+        </p>
+
+
+        <button
+            class="menu-item"
+            data-section="indicadores"
+        >
+            <i class="fa-solid fa-chart-column"></i>
+            <span>Indicadores</span>
+        </button>
+
+
+        <button
+            class="menu-item"
+            data-section="ranking"
+        >
+            <i class="fa-solid fa-ranking-star"></i>
+            <span>Ranking</span>
+        </button>
+
+
+        <button
+            class="menu-item"
+            data-section="exportacao"
+        >
+            <i class="fa-solid fa-file-export"></i>
+            <span>Exportação</span>
+        </button>
+
+
+        <p class="menu-title">
+            ADMINISTRAÇÃO
+        </p>
+
+
+        <button
+            class="menu-item"
+            data-section="usuarios"
+        >
+            <i class="fa-solid fa-users"></i>
+            <span>Usuários</span>
+        </button>
+
+
+        <button
+            class="menu-item"
+            data-section="configuracoes"
+        >
+            <i class="fa-solid fa-gear"></i>
+            <span>Configurações</span>
+        </button>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+
+        <div class="system-status">
+            <span class="status-dot"></span>
+
+            <span>
+                Sistema online
+            </span>
+        </div>
+
+        <small>
+            SIGDH 3.0
+        </small>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================================================
+     ÁREA PRINCIPAL
+========================================================= -->
+
+<main id="mainContent" class="main-content">
+
+
+    <!-- =====================================================
+         TOPBAR
+    ====================================================== -->
+
+    <header class="topbar">
+
+        <div class="topbar-left">
+
+            <button
+                id="sidebarToggle"
+                class="icon-button"
+                title="Menu"
+            >
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+
+            <div class="page-title">
+
+                <h1 id="pageTitle">
+                    Dashboard
                 </h1>
 
-                <p>
-                    Classificação automática de ofensores
+                <p id="pageSubtitle">
+                    Visão geral das demandas analisadas
                 </p>
 
             </div>
 
-            <div class="user-info">
+        </div>
 
-                <div id="dataAtual"></div>
 
-                <div id="horaAtual"></div>
+        <div class="topbar-right">
 
-                <div>
-                    👤 jamily Dias Menezes Santos
+            <div class="system-clock">
+
+                <strong id="currentDate">
+                    --/--/----
+                </strong>
+
+                <span id="currentTime">
+                    --:--
+                </span>
+
+            </div>
+
+
+            <div class="user-profile">
+
+                <div class="user-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <div class="user-info">
+
+                    <strong>
+                        Administrador
+                    </strong>
+
+                    <span>
+                        Acesso completo
+                    </span>
+
                 </div>
 
             </div>
 
-        </header>
+        </div>
 
-        <!-- DASHBOARD -->
+    </header>
 
-        <section class="dashboard">
 
-            <div class="card">
-                <h3>Total Demandas</h3>
-                <span id="totalDemandas">0</span>
+    <!-- =====================================================
+         CONTEÚDO
+    ====================================================== -->
+
+    <div class="page-content">
+
+
+        <!-- =================================================
+             DASHBOARD
+        ================================================== -->
+
+        <section
+            id="dashboard"
+            class="content-section active"
+        >
+
+            <div class="section-header">
+
+                <div>
+                    <span class="section-label">
+                        VISÃO GERAL
+                    </span>
+
+                    <h2>
+                        Dashboard
+                    </h2>
+
+                    <p>
+                        Acompanhe o desempenho das demandas do SAC.
+                    </p>
+                </div>
+
+
+                <div class="section-actions">
+
+                    <button
+                        class="btn btn-primary"
+                        id="dashboardImportButton"
+                    >
+                        <i class="fa-solid fa-file-import"></i>
+                        Importar Planilha
+                    </button>
+
+                </div>
+
             </div>
 
-            <div class="card">
-                <h3>Material</h3>
-                <span id="totalMaterial">0</span>
+
+            <!-- CARDS -->
+
+            <div class="stats-grid">
+
+                <article class="stat-card total-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Total de Demandas
+                        </span>
+
+                        <strong id="totalDemandas">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card material-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Material
+                        </span>
+
+                        <strong id="totalMaterial">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card medicamento-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-pills"></i>
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Medicamento
+                        </span>
+
+                        <strong id="totalMedicamento">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card logistica-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Logística
+                        </span>
+
+                        <strong id="totalLogistica">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card compra-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Compra
+                        </span>
+
+                        <strong id="totalCompra">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card opme-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-syringe"></i>
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            OPME
+                        </span>
+
+                        <strong id="totalOpme">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card critical-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Demandas Críticas
+                        </span>
+
+                        <strong id="totalCriticas">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card analyzed-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Processadas
+                        </span>
+
+                        <strong id="totalProcessadas">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
             </div>
 
-            <div class="card">
-                <h3>Medicamento</h3>
-                <span id="totalMedicamento">0</span>
+
+            <!-- GRÁFICOS -->
+
+            <div class="dashboard-grid">
+
+                <div class="panel chart-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>
+                                Demandas por Classificação
+                            </h3>
+
+                            <span>
+                                Distribuição das demandas
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="graficoClassificacao"></canvas>
+                    </div>
+
+                </div>
+
+
+                <div class="panel chart-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>
+                                Distribuição
+                            </h3>
+
+                            <span>
+                                Percentual por classificação
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="chart-container chart-small">
+                        <canvas id="graficoDistribuicao"></canvas>
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="card">
-                <h3>Farmácia</h3>
-                <span id="totalFarmacia">0</span>
+
+            <!-- RESUMO -->
+
+            <div class="dashboard-grid">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>
+                                Resumo Executivo
+                            </h3>
+
+                            <span>
+                                Situação atual da base
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="resumoExecutivo"
+                        class="executive-summary"
+                    >
+
+                        <div class="empty-state">
+
+                            <i class="fa-solid fa-chart-line"></i>
+
+                            <h4>
+                                Nenhuma planilha analisada
+                            </h4>
+
+                            <p>
+                                Importe uma planilha Excel para
+                                gerar o resumo executivo.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>
+                                Alertas do Sistema
+                            </h3>
+
+                            <span>
+                                Informações importantes
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="alertasSistema"
+                        class="alerts-container"
+                    >
+
+                        <div class="empty-state">
+
+                            <i class="fa-solid fa-bell"></i>
+
+                            <h4>
+                                Nenhum alerta
+                            </h4>
+
+                            <p>
+                                Não existem alertas no momento.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="card">
-                <h3>Logística</h3>
-                <span id="totalLogistica">0</span>
-            </div>
-
-            <div class="card">
-                <h3>OPME</h3>
-                <span id="totalOpme">0</span>
-            </div>
-
-            <div class="card">
-                <h3>Regulação</h3>
-                <span id="totalRegulacao">0</span>
-            </div>
-
-            <div class="card">
-                <h3>Demandas Críticas</h3>
-                <span id="totalCriticas">0</span>
-            </div>
 
         </section>
 
-        <!-- IMPORTAÇÃO -->
 
-        <section class="upload-section">
+        <!-- =================================================
+             DEMANDAS
+        ================================================== -->
 
-            <div class="box">
+        <section
+            id="demandas"
+            class="content-section"
+        >
 
-                <h2>Importar Planilha Excel</h2>
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        ANÁLISE
+                    </span>
+
+                    <h2>
+                        Demandas
+                    </h2>
+
+                    <p>
+                        Consulte e analise as reclamações importadas.
+                    </p>
+
+                </div>
+
+
+                <div class="section-actions">
+
+                    <button
+                        class="btn btn-primary"
+                        id="importButton"
+                    >
+                        <i class="fa-solid fa-file-excel"></i>
+                        Importar Excel
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ÁREA DE IMPORTAÇÃO -->
+
+            <div
+                id="dropZone"
+                class="upload-zone"
+            >
+
+                <div class="upload-icon">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+
+                <h3>
+                    Arraste sua planilha Excel aqui
+                </h3>
+
+                <p>
+                    ou selecione um arquivo do seu computador
+                </p>
+
+                <label
+                    for="arquivoExcel"
+                    class="btn btn-primary"
+                >
+                    <i class="fa-solid fa-folder-open"></i>
+                    Escolher arquivo
+                </label>
 
                 <input
                     type="file"
                     id="arquivoExcel"
-                    accept=".xlsx,.xls">
+                    accept=".xlsx,.xls,.csv"
+                    hidden
+                >
 
-                <button onclick="importarExcel()">
+                <small>
+                    Formatos aceitos: XLSX, XLS e CSV
+                </small>
 
-                    <i class="fa-solid fa-upload"></i>
+            </div>
 
-                    Importar Planilha
 
+            <!-- PROGRESSO -->
+
+            <div
+                id="importProgress"
+                class="import-progress"
+                style="display:none;"
+            >
+
+                <div class="progress-header">
+
+                    <span>
+                        Processando planilha...
+                    </span>
+
+                    <strong id="progressPercent">
+                        0%
+                    </strong>
+
+                </div>
+
+                <div class="progress-bar">
+                    <div
+                        id="progressBar"
+                        class="progress-fill"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <!-- PESQUISA -->
+
+            <div class="panel filters-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h3>
+                            Pesquisa e filtros
+                        </h3>
+
+                        <span>
+                            Localize uma demanda pelo nome ou número do registro.
+                        </span>
+
+                    </div>
+
+                    <button
+                        id="clearFilters"
+                        class="btn btn-secondary"
+                    >
+                        <i class="fa-solid fa-filter-circle-xmark"></i>
+                        Limpar
+                    </button>
+
+                </div>
+
+
+                <div class="filters-grid">
+
+                    <div class="form-group search-group">
+
+                        <label for="searchDemandas">
+                            Buscar
+                        </label>
+
+                        <div class="input-with-icon">
+
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                            <input
+                                type="search"
+                                id="searchDemandas"
+                                placeholder="Nome do beneficiário ou N° do registro..."
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="filtroClassificacao">
+                            Classificação
+                        </label>
+
+                        <select id="filtroClassificacao">
+
+                            <option value="">
+                                Todas
+                            </option>
+
+                            <option value="MATERIAL">
+                                Material
+                            </option>
+
+                            <option value="MEDICAMENTO">
+                                Medicamento
+                            </option>
+
+                            <option value="LOGISTICA">
+                                Logística
+                            </option>
+
+                            <option value="COMPRA">
+                                Compra
+                            </option>
+
+                            <option value="OPME">
+                                OPME
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="filtroOperadora">
+                            Operadora
+                        </label>
+
+                        <select id="filtroOperadora">
+
+                            <option value="">
+                                Todas
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="filtroPrioridade">
+                            Prioridade
+                        </label>
+
+                        <select id="filtroPrioridade">
+
+                            <option value="">
+                                Todas
+                            </option>
+
+                            <option value="ALTA">
+                                Alta
+                            </option>
+
+                            <option value="MEDIA">
+                                Média
+                            </option>
+
+                            <option value="BAIXA">
+                                Baixa
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TABELA -->
+
+            <div class="panel table-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h3>
+                            Registros analisados
+                        </h3>
+
+                        <span id="tableCounter">
+                            0 registros encontrados
+                        </span>
+
+                    </div>
+
+                    <div class="table-actions">
+
+                        <button
+                            class="btn btn-secondary"
+                            id="refreshTable"
+                        >
+                            <i class="fa-solid fa-rotate"></i>
+                            Atualizar
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table id="tabelaDemandas">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    N° REGISTRO
+                                </th>
+
+                                <th>
+                                    PROTOCOLO
+                                </th>
+
+                                <th>
+                                    BENEFICIÁRIO
+                                </th>
+
+                                <th>
+                                    DATA
+                                </th>
+
+                                <th>
+                                    RECLAMAÇÃO
+                                </th>
+
+                                <th>
+                                    PRESTADOR
+                                </th>
+
+                                <th>
+                                    OPERADORA
+                                </th>
+
+                                <th>
+                                    CLASSIFICAÇÃO
+                                </th>
+
+                                <th>
+                                    PRIORIDADE
+                                </th>
+
+                                <th>
+                                    AÇÃO
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="tabelaDemandasBody">
+
+                            <tr>
+
+                                <td
+                                    colspan="10"
+                                    class="table-empty"
+                                >
+
+                                    <i class="fa-solid fa-file-circle-question"></i>
+
+                                    <span>
+                                        Nenhuma demanda importada.
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div class="table-footer">
+
+                    <span id="paginationInfo">
+                        Página 1
+                    </span>
+
+                    <div class="pagination">
+
+                        <button
+                            id="previousPage"
+                            class="pagination-button"
+                            disabled
+                        >
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+
+                        <span id="currentPage">
+                            1
+                        </span>
+
+                        <button
+                            id="nextPage"
+                            class="pagination-button"
+                            disabled
+                        >
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             INDICADORES
+        ================================================== -->
+
+        <section
+            id="indicadores"
+            class="content-section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        ANÁLISE DE DADOS
+                    </span>
+
+                    <h2>
+                        Indicadores
+                    </h2>
+
+                    <p>
+                        Indicadores de desempenho da base SAC.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+                <article class="indicator-card">
+
+                    <span>
+                        Total analisado
+                    </span>
+
+                    <strong id="indicadorTotal">
+                        0
+                    </strong>
+
+                </article>
+
+
+                <article class="indicator-card">
+
+                    <span>
+                        Classificação dominante
+                    </span>
+
+                    <strong id="indicadorDominante">
+                        —
+                    </strong>
+
+                </article>
+
+
+                <article class="indicator-card">
+
+                    <span>
+                        Taxa de análise
+                    </span>
+
+                    <strong id="indicadorTaxa">
+                        0%
+                    </strong>
+
+                </article>
+
+
+                <article class="indicator-card">
+
+                    <span>
+                        Demandas críticas
+                    </span>
+
+                    <strong id="indicadorCriticas">
+                        0
+                    </strong>
+
+                </article>
+
+            </div>
+
+
+            <div class="dashboard-grid">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h3>
+                                Indicadores por classificação
+                            </h3>
+
+                            <span>
+                                Quantidade de registros
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="graficoIndicadores"></canvas>
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h3>
+                                Demandas por operadora
+                            </h3>
+
+                            <span>
+                                Distribuição da base
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="graficoOperadoras"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             RANKING
+        ================================================== -->
+
+        <section
+            id="ranking"
+            class="content-section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        DESEMPENHO
+                    </span>
+
+                    <h2>
+                        Ranking
+                    </h2>
+
+                    <p>
+                        Ranking das classificações com maior volume de demandas.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel ranking-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h3>
+                            Ranking de Ofensores
+                        </h3>
+
+                        <span>
+                            Classificações por quantidade de demandas
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="rankingContainer"
+                    class="ranking-list"
+                >
+
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-ranking-star"></i>
+
+                        <h4>
+                            Nenhum dado disponível
+                        </h4>
+
+                        <p>
+                            Importe uma planilha para gerar o ranking.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             EXPORTAÇÃO
+        ================================================== -->
+
+        <section
+            id="exportacao"
+            class="content-section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        RESULTADOS
+                    </span>
+
+                    <h2>
+                        Exportação
+                    </h2>
+
+                    <p>
+                        Exporte os resultados da análise.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="export-grid">
+
+                <div class="panel export-card">
+
+                    <div class="export-icon">
+                        <i class="fa-solid fa-file-excel"></i>
+                    </div>
+
+                    <h3>
+                        Resultado completo
+                    </h3>
+
+                    <p>
+                        Exporta todos os registros com as classificações
+                        e análises realizadas.
+                    </p>
+
+                    <button
+                        id="exportExcel"
+                        class="btn btn-primary"
+                    >
+                        <i class="fa-solid fa-download"></i>
+                        Exportar Excel
+                    </button>
+
+                </div>
+
+
+                <div class="panel export-card">
+
+                    <div class="export-icon">
+                        <i class="fa-solid fa-table"></i>
+                    </div>
+
+                    <h3>
+                        Relatório CSV
+                    </h3>
+
+                    <p>
+                        Gere uma versão CSV dos registros analisados.
+                    </p>
+
+                    <button
+                        id="exportCSV"
+                        class="btn btn-secondary"
+                    >
+                        <i class="fa-solid fa-file-csv"></i>
+                        Exportar CSV
+                    </button>
+
+                </div>
+
+
+                <div class="panel export-card">
+
+                    <div class="export-icon">
+                        <i class="fa-solid fa-print"></i>
+                    </div>
+
+                    <h3>
+                        Relatório
+                    </h3>
+
+                    <p>
+                        Gere uma visualização pronta para impressão.
+                    </p>
+
+                    <button
+                        id="printReport"
+                        class="btn btn-secondary"
+                    >
+                        <i class="fa-solid fa-print"></i>
+                        Imprimir
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             USUÁRIOS
+        ================================================== -->
+
+        <section
+            id="usuarios"
+            class="content-section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        ADMINISTRAÇÃO
+                    </span>
+
+                    <h2>
+                        Usuários
+                    </h2>
+
+                    <p>
+                        Gerenciamento dos usuários do sistema.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="newUserButton"
+                    class="btn btn-primary"
+                >
+                    <i class="fa-solid fa-user-plus"></i>
+                    Novo usuário
                 </button>
 
-                <button onclick="exportarTratada()">
+            </div>
 
-                    <i class="fa-solid fa-download"></i>
 
-                    Exportar Resultado
+            <div class="panel table-panel">
 
+                <div class="panel-header">
+
+                    <div>
+
+                        <h3>
+                            Usuários cadastrados
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Usuário
+                                </th>
+
+                                <th>
+                                    Perfil
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Último acesso
+                                </th>
+
+                                <th>
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="usuariosTableBody">
+
+                            <tr>
+
+                                <td>
+                                    Administrador
+                                </td>
+
+                                <td>
+                                    Administrador
+                                </td>
+
+                                <td>
+                                    <span class="status-badge active">
+                                        Ativo
+                                    </span>
+                                </td>
+
+                                <td>
+                                    Agora
+                                </td>
+
+                                <td>
+
+                                    <button
+                                        class="table-action"
+                                        title="Editar"
+                                    >
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CONFIGURAÇÕES
+        ================================================== -->
+
+        <section
+            id="configuracoes"
+            class="content-section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        SISTEMA
+                    </span>
+
+                    <h2>
+                        Configurações
+                    </h2>
+
+                    <p>
+                        Configure o funcionamento do SIGDH.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-grid">
+
+                <!-- SISTEMA -->
+
+                <div class="panel settings-card">
+
+                    <div class="settings-icon">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+
+                    <div class="settings-content">
+
+                        <h3>
+                            Configurações gerais
+                        </h3>
+
+                        <p>
+                            Defina as preferências gerais do sistema.
+                        </p>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Nome do sistema
+                            </label>
+
+                            <input
+                                type="text"
+                                id="systemName"
+                                value="SIGDH"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Versão
+                            </label>
+
+                            <input
+                                type="text"
+                                value="3.0"
+                                disabled
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CLASSIFICAÇÕES -->
+
+                <div class="panel settings-card">
+
+                    <div class="settings-icon">
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+
+                    <div class="settings-content">
+
+                        <h3>
+                            Classificações
+                        </h3>
+
+                        <p>
+                            Classificações utilizadas na análise.
+                        </p>
+
+
+                        <div class="classification-list">
+
+                            <span class="classification-tag material">
+                                MATERIAL
+                            </span>
+
+                            <span class="classification-tag medicamento">
+                                MEDICAMENTO
+                            </span>
+
+                            <span class="classification-tag logistica">
+                                LOGISTICA
+                            </span>
+
+                            <span class="classification-tag compra">
+                                COMPRA
+                            </span>
+
+                            <span class="classification-tag opme">
+                                OPME
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- REGRAS -->
+
+                <div class="panel settings-card">
+
+                    <div class="settings-icon">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+
+                    <div class="settings-content">
+
+                        <h3>
+                            Regras de análise
+                        </h3>
+
+                        <p>
+                            Colunas utilizadas pela análise automática.
+                        </p>
+
+
+                        <div class="columns-display">
+
+                            <span>
+                                A
+                            </span>
+
+                            <span>
+                                G
+                            </span>
+
+                            <span>
+                                I
+                            </span>
+
+                            <span>
+                                L
+                            </span>
+
+                            <span>
+                                P
+                            </span>
+
+                            <span>
+                                Q
+                            </span>
+
+                            <span>
+                                AD
+                            </span>
+
+                            <span>
+                                AE
+                            </span>
+
+                            <span>
+                                AM
+                            </span>
+
+                            <span>
+                                AV
+                            </span>
+
+                            <span>
+                                BB
+                            </span>
+
+                        </div>
+
+
+                        <small>
+                            A análise utilizará somente as colunas configuradas.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INTERFACE -->
+
+                <div class="panel settings-card">
+
+                    <div class="settings-icon">
+                        <i class="fa-solid fa-display"></i>
+                    </div>
+
+                    <div class="settings-content">
+
+                        <h3>
+                            Interface
+                        </h3>
+
+                        <p>
+                            Personalize a experiência do sistema.
+                        </p>
+
+
+                        <label class="switch-option">
+
+                            <span>
+                                Atualização automática
+                            </span>
+
+                            <input
+                                type="checkbox"
+                                id="autoUpdate"
+                                checked
+                            >
+
+                            <span class="switch"></span>
+
+                        </label>
+
+
+                        <label class="switch-option">
+
+                            <span>
+                                Notificações
+                            </span>
+
+                            <input
+                                type="checkbox"
+                                id="notifications"
+                                checked
+                            >
+
+                            <span class="switch"></span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-actions">
+
+                <button
+                    id="saveSettings"
+                    class="btn btn-primary"
+                >
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Salvar configurações
+                </button>
+
+                <button
+                    id="resetSettings"
+                    class="btn btn-secondary"
+                >
+                    <i class="fa-solid fa-rotate-left"></i>
+                    Restaurar padrão
                 </button>
 
             </div>
 
         </section>
 
-        <!-- DRAG DROP -->
+    </div>
 
-        <section id="dropzone">
+</main>
 
-            <i class="fa-solid fa-cloud-arrow-up"></i>
 
-            <p>
-                Arraste a planilha Excel para esta área
-            </p>
+<!-- =========================================================
+     MODAL DE DETALHES
+========================================================= -->
 
-        </section>
+<div
+    id="demandModal"
+    class="modal"
+    aria-hidden="true"
+>
 
-        <!-- PESQUISA -->
+    <div class="modal-overlay"></div>
 
-        <section class="search-area">
+    <div class="modal-content">
 
-            <input
-                type="text"
-                id="busca"
-                placeholder="Pesquisar protocolo, beneficiário ou reclamação">
+        <div class="modal-header">
 
-            <button>
+            <div>
 
-                Buscar
+                <span class="section-label">
+                    DETALHES
+                </span>
 
+                <h2>
+                    Demanda
+                </h2>
+
+            </div>
+
+            <button
+                id="closeDemandModal"
+                class="modal-close"
+            >
+                <i class="fa-solid fa-xmark"></i>
             </button>
 
-        </section>
+        </div>
 
-        <!-- FILTROS -->
 
-        <section class="filtros">
+        <div
+            id="demandDetails"
+            class="modal-body"
+        >
 
-            <select id="filtroOfensor">
+            <!-- preenchido pelo JavaScript -->
 
-                <option>Todos</option>
+        </div>
 
-                <option>Material</option>
+    </div>
 
-                <option>Medicamento</option>
+</div>
 
-                <option>Farmácia</option>
 
-                <option>Logística</option>
+<!-- =========================================================
+     MODAL DE NOVO USUÁRIO
+========================================================= -->
 
-                <option>OPME</option>
+<div
+    id="userModal"
+    class="modal"
+    aria-hidden="true"
+>
 
-                <option>Regulação</option>
+    <div class="modal-overlay"></div>
 
-            </select>
+    <div class="modal-content">
 
-            <select id="filtroPrioridade">
+        <div class="modal-header">
 
-                <option>Todas Prioridades</option>
+            <div>
 
-                <option>Alta</option>
+                <span class="section-label">
+                    ADMINISTRAÇÃO
+                </span>
 
-                <option>Média</option>
-
-                <option>Baixa</option>
-
-            </select>
-
-        </section>
-
-        <!-- ALERTAS -->
-
-        <section class="alertas">
-
-            <h2>Alertas do Sistema</h2>
-
-            <div id="alertaSistema">
-
-                Nenhum alerta encontrado.
+                <h2>
+                    Novo usuário
+                </h2>
 
             </div>
 
-        </section>
-
-        <!-- RESUMO -->
-
-        <section class="resumo">
-
-            <h2>Resumo Executivo</h2>
-
-            <div id="resumoSistema">
-
-                Nenhuma planilha importada.
-
-            </div>
-
-        </section>
-
-        <!-- RANKING -->
-
-        <section class="ranking">
-
-            <h2>Ranking de Ofensores</h2>
-
-            <ol id="rankingOfensores">
-
-            </ol>
-
-        </section>
-
-        <!-- GRÁFICOS -->
-
-        <section class="graficos">
-
-            <div class="grafico-card">
-
-                <h3>Demandas por Ofensor</h3>
-
-                <canvas id="graficoOfensor"></canvas>
-
-            </div>
-
-            <div class="grafico-card">
-
-                <h3>Demandas por Prioridade</h3>
-
-                <canvas id="graficoPrioridade"></canvas>
-
-            </div>
-
-            <div class="grafico-card">
-
-                <h3>Demandas por Status</h3>
-
-                <canvas id="graficoStatus"></canvas>
-
-            </div>
-
-            <div class="grafico-card">
-
-                <h3>Demandas por Operadora</h3>
-
-                <canvas id="graficoOperadora"></canvas>
-
-            </div>
-
-        </section>
-
-        <!-- HISTÓRICO -->
-
-        <section class="historico">
-
-            <h2>Histórico de Importações</h2>
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>Data</th>
-
-                        <th>Quantidade</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody id="historicoImportacoes">
-
-                </tbody>
-
-            </table>
-
-        </section>
-
-        <!-- TABELA PRINCIPAL -->
-
-        <section class="tabela-container">
-
-            <h2>Demandas Processadas</h2>
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-
-                        <th>REGISTRO</th>
-
-                        <th>PROTOCOLO</th>
-
-                        <th>BENEFICIÁRIO</th>
-
-                        <th>OPERADORA</th>
-
-                        <th>PRESTADOR</th>
-
-                        <th>RECLAMAÇÃO</th>
-
-                        <th>OFENSOR</th>
-
-                        <th>PRIORIDADE</th>
-
-                        <th>STATUS</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody id="tabelaDemandas">
-
-                </tbody>
-
-            </table>
-
-        </section>
-
-        <!-- AÇÕES -->
-
-        <section class="acoes">
-
-            <button id="darkMode">
-
-                🌙 Modo Escuro
-
+            <button
+                id="closeUserModal"
+                class="modal-close"
+            >
+                <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <button onclick="window.print()">
+        </div>
 
-                📄 Gerar PDF
 
-            </button>
+        <div class="modal-body">
 
-        </section>
+            <form id="userForm">
 
-        <!-- RODAPÉ -->
+                <div class="form-group">
 
-        <footer>
+                    <label for="userName">
+                        Nome
+                    </label>
 
-            SIGDH © 2026
+                    <input
+                        type="text"
+                        id="userName"
+                        placeholder="Nome do usuário"
+                        required
+                    >
 
-            Sistema Integrado de Gestão de Demandas Hospitalares
+                </div>
 
-        </footer>
 
-    </main>
+                <div class="form-group">
 
-    <script src="js/script.js"></script>
+                    <label for="userEmail">
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="userEmail"
+                        placeholder="usuario@empresa.com"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="userRole">
+                        Perfil
+                    </label>
+
+                    <select id="userRole">
+
+                        <option value="usuario">
+                            Usuário
+                        </option>
+
+                        <option value="analista">
+                            Analista
+                        </option>
+
+                        <option value="administrador">
+                            Administrador
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        id="cancelUser"
+                        class="btn btn-secondary"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        <i class="fa-solid fa-user-plus"></i>
+                        Criar usuário
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     NOTIFICAÇÕES
+========================================================= -->
+
+<div
+    id="toastContainer"
+    class="toast-container"
+></div>
+
+
+<!-- =========================================================
+     INPUT OCULTO PARA IMPORTAÇÃO
+========================================================= -->
+
+<input
+    type="file"
+    id="hiddenExcelInput"
+    accept=".xlsx,.xls,.csv"
+    hidden
+>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script src="js/script.js"></script>
 
 </body>
-
 </html>
